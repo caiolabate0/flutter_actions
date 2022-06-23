@@ -2,7 +2,7 @@ name: Pull request check
 
 on: 
   workflow_call:
-    secrets:
+    inputs:
       SSH_PRIVATE_KEY_CORE:
         required: true
       SSH_PRIVATE_KEY_DS:
@@ -26,8 +26,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
-                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
+                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
@@ -37,7 +37,7 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter analyze .
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.GIT_TOKEN }}
       
   format:
     timeout-minutes: 15
@@ -54,8 +54,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
-                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
+                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
@@ -65,7 +65,7 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter format . --set-exit-if-changed 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
 
   test:
     timeout-minutes: 15
@@ -82,8 +82,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
-                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
+                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
@@ -93,5 +93,5 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter test . 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     
