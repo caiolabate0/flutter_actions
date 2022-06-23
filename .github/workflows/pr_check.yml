@@ -3,11 +3,12 @@ name: Pull request check
 on: 
   workflow_call:
     inputs:
+      GIT_TOKEN:
+        required: true
+    secrets:
       SSH_PRIVATE_KEY_CORE:
         required: true
       SSH_PRIVATE_KEY_DS:
-        required: true
-      GIT_TOKEN:
         required: true
 
 jobs:
@@ -26,8 +27,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
-                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
@@ -54,8 +55,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
-                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
@@ -82,8 +83,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.4
         with:
             ssh-private-key: |
-                  ${{ inputs.SSH_PRIVATE_KEY_CORE }}
-                  ${{ inputs.SSH_PRIVATE_KEY_DS }}
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
