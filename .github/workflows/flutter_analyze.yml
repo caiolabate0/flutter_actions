@@ -22,12 +22,13 @@ jobs:
           flutter-version: '3.0.2'
           channel: 'stable'  
       - uses: webfactory/ssh-agent@v0.5.4
-        with:
-          if: ${{ secrets.SSH_PRIVATE_KEY_CORE != ''}}
+        if: ${{ secrets.SSH_PRIVATE_KEY_CORE != ''}}
+          with:
             ssh-private-key: |
                   ${{ secrets.SSH_PRIVATE_KEY_CORE }}
                   ${{ secrets.SSH_PRIVATE_KEY_DS }}
-          if: ${{ secrets.SSH_PRIVATE_KEY_CORE == ''}}
+        if: ${{ secrets.SSH_PRIVATE_KEY_CORE == ''}}
+          with:
             ssh-private-key: |
                   ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
