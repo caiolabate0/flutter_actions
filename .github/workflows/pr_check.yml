@@ -2,13 +2,12 @@ name: Pull request check
 
 on: 
   workflow_call:
-    inputs:
-      GIT_TOKEN:
-        required: true
     secrets:
       SSH_PRIVATE_KEY_CORE:
         required: true
       SSH_PRIVATE_KEY_DS:
+        required: true
+      GIT_TOKEN:
         required: true
 
 jobs:
@@ -38,7 +37,7 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter analyze .
         env:
-          GITHUB_TOKEN: ${{ inputs.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       
   format:
     timeout-minutes: 15
@@ -66,7 +65,7 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter format . --set-exit-if-changed 
         env:
-          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     timeout-minutes: 15
@@ -94,5 +93,5 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter test . 
         env:
-          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
     
