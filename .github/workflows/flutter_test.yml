@@ -4,9 +4,7 @@ on:
   workflow_call:
     secrets:
       SSH_PRIVATE_KEY_CORE:
-        required: true
       SSH_PRIVATE_KEY_DS:
-        required: true
       GIT_TOKEN:
         required: true
 
