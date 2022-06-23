@@ -23,8 +23,12 @@ jobs:
           channel: 'stable'  
       - uses: webfactory/ssh-agent@v0.5.4
         with:
+          if: ${{ secrets.SSH_PRIVATE_KEY_CORE != ''}}
             ssh-private-key: |
                   ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+          if: ${{ secrets.SSH_PRIVATE_KEY_CORE == ''}}
+            ssh-private-key: |
                   ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
