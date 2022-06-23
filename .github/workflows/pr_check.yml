@@ -7,7 +7,7 @@ on:
         required: true
       SSH_PRIVATE_KEY_DS:
         required: true
-      TOKEN1:
+      GIT_TOKEN:
         required: true
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
       - name: "Flutter Analyze"
         run: flutter analyze .
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN1 }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       
   format:
     timeout-minutes: 15
