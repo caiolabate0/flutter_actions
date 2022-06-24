@@ -8,6 +8,9 @@ on:
 
 jobs:
   analyze:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
       - name: "Bootstrap Main Workspace"
         run: flutter packages get
       - name: "Bootstrap Sample"
