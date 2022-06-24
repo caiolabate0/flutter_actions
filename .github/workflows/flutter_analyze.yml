@@ -21,7 +21,9 @@ jobs:
           flutter-version: '3.0.2'
           channel: 'stable'  
       - name: "Bootstrap Main Workspace"
-        run: ${{ inputs.PATH }}/flutter packages get
+        run: |
+          cd ${{ inputs.PATH }}
+          flutter packages get
       - name: "Bootstrap Sample"
         run: |
           touch sample/.env
