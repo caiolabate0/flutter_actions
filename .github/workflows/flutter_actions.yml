@@ -74,6 +74,4 @@ jobs:
           flutter-version: '3.0.2'
           channel: 'stable'  
       - name: "Flutter Test"
-        run: |
-          cd ..
-          flutter test
+        run: flutter test
