@@ -2,11 +2,11 @@ name: Flutter analyze
 
 on: 
   workflow_call:
-    inputs:
-      PATH: 
-        required: true
-        type: string
     secrets:
+      SSH_PRIVATE_KEY_CORE:
+        required: true
+      SSH_PRIVATE_KEY_DS:
+        required: true
       GIT_TOKEN:
         required: true
 
@@ -15,15 +15,21 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Configuring flutter environment
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.2'
           channel: 'stable'  
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+            ssh-private-key: |
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
       - name: "Bootstrap Main Workspace"
-        run: |
-          cd ${{ inputs.PATH }}
-          flutter packages get
+        run: flutter packages get
       - name: "Bootstrap Sample"
         run: |
           touch sample/.env
