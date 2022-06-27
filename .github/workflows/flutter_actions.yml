@@ -1,4 +1,4 @@
-name: Flutter analyze
+name: Flutter git actions
 
 on: 
   workflow_call:
