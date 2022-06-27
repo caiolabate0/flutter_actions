@@ -11,9 +11,7 @@ on:
         required: true
 
 jobs:
-  analyze:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
+  configure:
     steps:
       - uses: actions/checkout@v2
         with:
@@ -34,11 +32,29 @@ jobs:
         run: |
           touch sample/.env
           flutter pub get && flutter pub get sample
-      - name: "Flutter Analyze"
-        run: flutter analyze .
-      - name: "Flutter Format"
-        run: flutter format .  
-      - name: "Flutter Test"
-        run: flutter test
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+  analyze:
+    needs: configure
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Flutter Analyze"
+        run: flutter analyze .
+
+  format:
+    needs: configure
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Flutter Format"
+        run: flutter format .  
+
+  test:
+    needs: configure
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Flutter Test"
+        run: flutter test
