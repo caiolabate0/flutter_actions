@@ -11,7 +11,7 @@ on:
         required: true
 
 jobs:
-  configure:
+  analyze:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
@@ -32,44 +32,53 @@ jobs:
         run: |
           touch sample/.env
           flutter pub get && flutter pub get sample/
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: "Flutter Analyze"
+        run: flutter analyze .
 
-  # analyze:
-  #   timeout-minutes: 15
-  #   runs-on: ubuntu-latest
-  #   needs: configure
-  #   steps:
-  #     - name: Configuring flutter environment
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.0.2'
-  #         channel: 'stable'  
-  #     - name: "Flutter Analyze"
-  #       run: flutter analyze .
-
-  # format:
-  #   timeout-minutes: 15
-  #   runs-on: ubuntu-latest
-  #   needs: configure
-  #   steps:
-  #     - name: Configuring flutter environment
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.0.2'
-  #         channel: 'stable'  
-  #     - name: "Flutter Format"
-  #       run: flutter format . --set-exit-if-changed  
-
-  test:
+  format:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    needs: configure
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Configuring flutter environment
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.2'
           channel: 'stable'  
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+            ssh-private-key: |
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+      - name: "Bootstrap Workspace and Sample"
+        run: |
+          touch sample/.env
+          flutter pub get && flutter pub get sample/
+      - name: "Flutter Format"
+        run: flutter format . --set-exit-if-changed  
+
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Configuring flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.2'
+          channel: 'stable'  
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+            ssh-private-key: |
+                  ${{ secrets.SSH_PRIVATE_KEY_CORE }}
+                  ${{ secrets.SSH_PRIVATE_KEY_DS }}
+      - name: "Bootstrap Workspace and Sample"
+        run: |
+          touch sample/.env
+          flutter pub get && flutter pub get sample/
       - name: "Flutter Test"
         run: flutter test .
